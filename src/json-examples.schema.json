@@ -1,0 +1,44 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"title": "json-examples.schema",
+	"type": "object",
+	"unevaluatedProperties": false,
+	"properties": {
+		"$schema": { "type": "string" },
+		"jsons": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"unevaluatedProperties": false,
+				"required": ["group", "label", "valid", "instance"],
+
+				"properties": {
+					"group": {
+						"type": "string",
+						"description": "系統種別"
+					},
+					"name": {
+						"type": "string",
+						"description": "exampleが対象にしているschmeaについての name。カテゴライズ目的"
+					},
+					"pointer": {
+						"type": "string",
+						"format": "json-pointer",
+						"description": "exampleが対象にしているschmeaへの json-pointer"
+					},
+					"label": {
+						"type": "string",
+						"description": "解説"
+					},
+					"valid": {
+						"type": "boolean",
+						"description": "true:instanceがschema上正しいことを想定している\nfalse:instanceがschema上正しくないことを想定している"
+					},
+					"instance": {
+						"description": "exampleの実体"
+					}
+				}
+			}
+		}
+	}
+}
