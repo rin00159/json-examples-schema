@@ -2,6 +2,12 @@
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
 	"title": "json-examples.schema",
 	"$defs": {
+		"stringOrStrings": {
+			"oneOf": [
+				{ "type": "string" },
+				{ "type": "array", "items": { "type": "string" } }
+			]
+		},
 		"expectedError": {
 			"type": "object",
 			"title": "エラー詳細",
@@ -28,7 +34,7 @@
 				"message": {
 					"title": "期待されるエラーメッセージの検証仕様",
 					"description": "出力されるべきエラーメッセージ、またはその検証ルールを定義します。単純な文字列（部分一致など）のほか、オブジェクト形式で正規表現や複数キーワードを用いた柔軟な検証を指定できます。",
-					"anyOf": [
+					"oneOf": [
 						{
 							"type": "string",
 							"title": "文字列による検証",
@@ -42,7 +48,7 @@
 								"regex": {
 									"type": "array",
 									"title": "正規表現パターンの配列",
-									"description": "エラーメッセージが満たすべき正規表現パターン。リストならばテストランナーは、配列内のすべての正規表現にマッチするか（AND条件）を検証します。",
+									"description": "エラーメッセージが満たすべき正規表現パターン。リストならばテストランナーは、配列内のすべての正規表現にマッチするかを検証します。",
 									"items": {
 										"oneOf": [
 											{ "type": "string", "format": "regex" },
@@ -56,21 +62,15 @@
 								"keyword": {
 									"type": "array",
 									"title": "必須キーワードの配列",
-									"description": "エラーメッセージに含まれていなければならないキーワード。リストならばすべての文字列が含まれているか（AND条件）を検証します。",
+									"description": "エラーメッセージに含まれていなければならないキーワード。リストならばすべての文字列が含まれているかを検証します。",
 									"items": { "$ref": "#/$defs/stringOrStrings" }
 								}
 							},
-							"additionalProperties": false
+							"unevaluatedProperties": false
 						}
 					]
 				}
 			}
-		},
-		"stringOrStrings": {
-			"oneOf": [
-				{ "type": "string" },
-				{ "type": "array", "items": { "type": "string" } }
-			]
 		},
 		"json-example": {
 			"type": "object",
@@ -80,49 +80,47 @@
 			"properties": {
 				"group": {
 					"type": "string",
-					"description": "主要 系統種別",
-					"group": {
-						"oneOf": [
-							{
-								"const": "basic",
-								"title": "Basic Group",
-								"description": "基本的な用途のJSON。代表例"
-							},
+					"description": "主要系統種別",
+					"oneOf": [
+						{
+							"const": "basic",
+							"title": "Basic Group",
+							"description": "基本的な用途のJSON。代表例"
+						},
 
-							{
-								"const": "deprecated",
-								"title": "Deprecated Group",
-								"description": "非推奨となったJSON。{valid:false}での運用が想定される。"
-							},
-							{
-								"const": "deprecated:property",
-								"title": "Deprecated Property Group",
-								"description": "非推奨となったプロパティについてのJSON。{valid:false}での運用が想定される。"
-							},
+						{
+							"const": "property",
+							"title": "Property Group",
+							"description": "プロパティ/node についてのexample",
+							"$comment": "pointerを適切に利用していて、groupを処理で重視していない場合は、suffixを適切に割り当てなくても支障ない場合が多い"
+						},
+						{
+							"const": "property:root",
+							"title": "Root Property Group",
+							"description": "root プロパティ/node についてのexample"
+						},
+						{
+							"const": "property:defs",
+							"title": "Defs Property Group",
+							"description": "defsに定義された プロパティ/node についてのexample"
+						},
 
-							{
-								"const": "property",
-								"title": "Property Group",
-								"description": "プロパティ/node についてのexample",
-								"$comment": "pointerを適切に利用していて、groupを処理で重視していない場合は、suffixを適切に割り当てなくても支障なし"
-							},
-							{
-								"const": "property:root",
-								"title": "Property Group",
-								"description": "root プロパティ/node についてのexample"
-							},
-							{
-								"const": "property:defs",
-								"title": "Property Group",
-								"description": "defsに定義された プロパティ/node についてのexample"
-							}
-						]
-					}
+						{
+							"const": "obsolete",
+							"title": "Deprecated Group",
+							"description": "廃止されたschemaに関するJSON。主に想定される用途は、廃止されたjsonがバリデーションerrorになりそれはどのようなjsonかを示すために{valid:false}で配置する。"
+						},
+						{
+							"const": "obsolete:property",
+							"title": "Deprecated Property Group",
+							"description": "廃止されたschemaに関するJSON。主に想定される用途は、「廃止されたjsonがバリデーションerrorになること」「それはどのようなjsonか」を示すために{valid:false}で配置する。"
+						}
+					]
 				},
 				"group-pointer": {
 					"type": "string",
 					"format": "json-pointer",
-					"description": "カテゴライズ項目として、exampleが対象にしているschmeaへの json-pointer。"
+					"description": "カテゴライズ項目として、exampleが対象にしているschmeaへの json-pointer。exampleが対象としているschema-pointによってカテゴライズしたい場合に使用する"
 				},
 				"name": {
 					"type": "string",
@@ -150,7 +148,8 @@
 				},
 				"valid@when_formatAssertion": {
 					"type": "boolean",
-					"description": "formatAssertionである場合に`validプロパティ`の値を上書きする高度なバリデーションルール。このような条件付き置き換えは主に、`バリデーションエンジンが対応できていないことがあるjsonschema`が関わるjsonに対するバリデーション判定に対して、対応していなくても対応していても正しい判定結果を宣言・指定 できる様にするために有用"
+					"description": "formatAssertionである場合に`validプロパティ`の値を指定された値で上書きする。\n上書きはバリデーション時のみの挙動でありifなどのjsonschemaによるあらゆる判定より先に適応される。このプロパティは`他のschema`や`バリデーション以外の処理`で参照してはなず、バリデーション後に利用される場合は除外されているのが望ましい。省略時は何もしない",
+					"$comment": "このような条件付き置き換えは主に、`バリデーションエンジンが対応できていないことがあるjsonschema`が関わるjsonに対するバリデーション判定に対して、対応していなくても対応していても正しい判定結果を宣言・指定 できる様にするために有用"
 				},
 				"instance": {
 					"description": "exampleの実体"
@@ -158,7 +157,7 @@
 				"expectedErrors": {
 					"type": "array",
 					"title": "期待されるバリデーションエラー",
-					"description": "valid: false の場合において、データ内のどこで・どのような制約違反が発生すべきかを厳密に定義します。意図しない別のエラー（タイポなど）でテストが通過する偽陽性を防ぎます。",
+					"description": "データ内のどこで・どのような制約違反が発生すべきかを厳密に定義します。意図しない別のエラー（タイポなど）でテストが通過する偽陽性を防ぎます。",
 					"$comment": "Ajv等のテストランナーと連携し、エラーの発生パスとキーワードを突合させるためのプロパティです。",
 					"items": { "$ref": "#/$defs/expectedError" }
 				}
@@ -171,8 +170,8 @@
 			"then": {
 				"properties": {
 					"expectedErrors": {
-						"maxItems": 0,
-						"description": "valid: true の正常系テストでは、エラーが存在してはならないため空配列（またはプロパティ自体の省略）を強制します。"
+						"not": {},
+						"description": "valid: true の正常系テストでは、エラーが存在してはならないため省略を強制します。"
 					}
 				}
 			}
