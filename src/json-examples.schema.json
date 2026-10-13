@@ -135,7 +135,7 @@
 					},
 
 					"pointer": {
-						"description": "exampleが対象にしているschmeaへの json-pointer。「カテゴライズ項目」ではないexampleの主題となるnodeを示すgroup-pointer。jsonから明らかな場合に無理してつける必要はない",
+						"description": "exampleが対象にしているschmeaへの json-pointer。「カテゴライズ項目」ではないexampleの主題となるnodeを示すgroup-pointer。instanceに頼らずこれをつけ強調する必要がある場合に使う",
 						"oneOf": [
 							{ "type": "string", "format": "json-pointer" },
 							{
