@@ -47,24 +47,20 @@
 							"description": "正規表現や特定キーワードの含有を複数条件で検証するためのオブジェクト形式です。",
 							"properties": {
 								"regex": {
-									"type": "array",
-									"title": "正規表現パターンの配列",
-									"description": "エラーメッセージが満たすべき正規表現パターン。リストならばテストランナーは、配列内のすべての正規表現にマッチするかを検証します。",
-									"items": {
-										"oneOf": [
-											{ "type": "string", "format": "regex" },
-											{
-												"type": "array",
-												"items": { "type": "string", "format": "regex" }
-											}
-										]
-									}
+									"title": "正規表現パターン",
+									"description": "エラーメッセージが満たすべき正規表現パターン。配列の場合は、すべての正規表現にマッチするかを検証します。",
+									"oneOf": [
+										{ "type": "string", "format": "regex" },
+										{
+											"type": "array",
+											"items": { "type": "string", "format": "regex" }
+										}
+									]
 								},
 								"keyword": {
-									"type": "array",
-									"title": "必須キーワードの配列",
-									"description": "エラーメッセージに含まれていなければならないキーワード。リストならばすべての文字列が含まれているかを検証します。",
-									"items": { "$ref": "#/$defs/stringOrStrings" }
+									"title": "必須キーワード",
+									"description": "エラーメッセージに含まれていなければならないキーワード。配列の場合はすべての文字列が含まれているかを検証します。",
+									"$ref": "#/$defs/stringOrStrings"
 								}
 							},
 							"unevaluatedProperties": false
@@ -76,6 +72,7 @@
 	},
 	"type": "object",
 	"unevaluatedProperties": false,
+	"required": ["jsons"],
 	"properties": {
 		"$schema": { "type": "string" },
 		"jsons": {
@@ -84,7 +81,6 @@
 				"type": "object",
 				"unevaluatedProperties": false,
 				"required": ["group", "valid", "instance"],
-
 				"properties": {
 					"group": {
 						"type": "string",
@@ -95,7 +91,6 @@
 								"title": "Basic Group",
 								"description": "基本的な用途のJSON。代表例"
 							},
-
 							{
 								"const": "property",
 								"title": "Property Group",
@@ -112,7 +107,6 @@
 								"title": "Defs Property Group",
 								"description": "defsに定義された プロパティ/node についてのexample"
 							},
-
 							{
 								"const": "obsolete",
 								"title": "Deprecated Group",
@@ -134,7 +128,6 @@
 						"type": "string",
 						"description": "exampleが対象にしているschmeaについての カテゴライズ名"
 					},
-
 					"pointer": {
 						"description": "exampleが対象にしているschmeaへの強調したい部分への json-pointer。大抵はinstanceから読めるため余程強調したい場合以外は不要。",
 						"oneOf": [
@@ -149,7 +142,6 @@
 						"type": "string",
 						"description": "タイトルや説明。"
 					},
-
 					"valid": {
 						"type": "boolean",
 						"description": "true:instanceがschema上正しいことを想定している\nfalse:instanceがschema上正しくないことを想定している"
