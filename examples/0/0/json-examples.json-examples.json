@@ -1,0 +1,997 @@
+{
+	"$schema": "./schema/json-examples.json-examples.schema.json",
+	"jsons": [
+		{
+			"group": "basic",
+			"label": "正常: 最小の examples ファイル",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true,
+						"instance": {}
+					}
+				]
+			}
+		},
+		{
+			"group": "basic",
+			"label": "正常: 全プロパティを指定した examples ファイル",
+			"valid": true,
+			"instance": {
+				"$schema": "./schema/foo.json-examples.schema.json",
+				"jsons": [
+					{
+						"group": "property",
+						"groupPointer": "/$defs/foo",
+						"name": "size",
+						"pointer": [
+							"/a",
+							"/b"
+						],
+						"label": "正常: foo",
+						"valid": true,
+						"instance": {
+							"a": 1
+						}
+					},
+					{
+						"group": "property",
+						"label": "foo は不可",
+						"valid": false,
+						"valid@when_format-assertion": true,
+						"instance": [],
+						"expectedErrors": [
+							{
+								"instanceLocation": "",
+								"schemaLocation": "#/type",
+								"keyword": "type",
+								"message": "must be object"
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"group": "property:root",
+			"label": "jsons は必須",
+			"valid": false,
+			"instance": {
+				"$schema": "./x.json"
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "",
+					"keyword": "required"
+				}
+			]
+		},
+		{
+			"group": "property:root",
+			"label": "正常: jsons は空配列でも可",
+			"valid": true,
+			"instance": {
+				"jsons": []
+			}
+		},
+		{
+			"group": "property:root",
+			"label": "トップレベルの未定義プロパティは不可",
+			"valid": false,
+			"instance": {
+				"jsons": [],
+				"extra": 1
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "",
+					"keyword": "unevaluatedProperties"
+				}
+			]
+		},
+		{
+			"group": "property:root",
+			"label": "jsons は配列でなければならない",
+			"valid": false,
+			"instance": {
+				"jsons": {}
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons",
+					"keyword": "type"
+				}
+			]
+		},
+		{
+			"group": "property:root",
+			"label": "$schema は文字列でなければならない",
+			"valid": false,
+			"instance": {
+				"$schema": 1,
+				"jsons": []
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/$schema",
+					"keyword": "type"
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/group",
+			"label": "正常: group 'basic'",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true,
+						"instance": null
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/group",
+			"label": "正常: group 'property'",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": true,
+						"instance": null
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/group",
+			"label": "正常: group 'property:root'",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property:root",
+						"valid": true,
+						"instance": null
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/group",
+			"label": "正常: group 'property:defs'",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property:defs",
+						"valid": true,
+						"instance": null
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/group",
+			"label": "正常: group 'obsolete'",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "obsolete",
+						"valid": true,
+						"instance": null
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/group",
+			"label": "正常: group 'obsolete:property'",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "obsolete:property",
+						"valid": true,
+						"instance": null
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/group",
+			"label": "group は列挙外の値は不可",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "other",
+						"valid": true,
+						"instance": 1
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/group",
+					"keyword": "oneOf"
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items",
+			"label": "group は必須",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"valid": true,
+						"instance": 1
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0",
+					"keyword": "required"
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items",
+			"label": "valid は必須",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"instance": 1
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0",
+					"keyword": "required"
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items",
+			"label": "instance は必須",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0",
+					"keyword": "required"
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/instance",
+			"label": "正常: instance は任意の型(null)を許可",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true,
+						"instance": null
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/instance",
+			"label": "正常: instance は任意の型(配列)を許可",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true,
+						"instance": [
+							1,
+							"a",
+							{}
+						]
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/valid",
+			"label": "valid は真偽値でなければならない",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": "true",
+						"instance": 1
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/valid",
+					"keyword": "type"
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items",
+			"label": "jsons の要素の未定義プロパティは不可",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true,
+						"instance": 1,
+						"memo": "x"
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0",
+					"keyword": "unevaluatedProperties"
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/groupPointer",
+			"label": "正常: groupPointer は JSON Pointer",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"groupPointer": "/$defs/a/b",
+						"valid": true,
+						"instance": 1
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/groupPointer",
+			"label": "groupPointer が JSON Pointer でない: format 未評価では可、format 評価時は不可",
+			"valid": true,
+			"valid@when_format-assertion": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"groupPointer": "$defs/a",
+						"valid": true,
+						"instance": 1
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/pointer",
+			"label": "正常: pointer は文字列",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"pointer": "/a",
+						"valid": true,
+						"instance": 1
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/pointer",
+			"label": "正常: pointer は文字列の配列",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"pointer": [
+							"/a",
+							"/b"
+						],
+						"valid": true,
+						"instance": 1
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/pointer",
+			"label": "pointer は数値は不可",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"pointer": 1,
+						"valid": true,
+						"instance": 1
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/pointer",
+					"keyword": "oneOf"
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/pointer",
+			"label": "pointer の配列要素は文字列でなければならない",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"pointer": [
+							"/a",
+							1
+						],
+						"valid": true,
+						"instance": 1
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/pointer",
+					"keyword": "oneOf"
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/name",
+			"label": "name は文字列でなければならない",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"name": 1,
+						"valid": true,
+						"instance": 1
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/name",
+					"keyword": "type"
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/label",
+			"label": "label は文字列でなければならない",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"label": [
+							"a"
+						],
+						"valid": true,
+						"instance": 1
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/label",
+					"keyword": "type"
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/valid@when_format-assertion",
+			"label": "正常: valid@when_format-assertion は真偽値",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": true,
+						"valid@when_format-assertion": false,
+						"instance": 1
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/valid@when_format-assertion",
+			"label": "valid@when_format-assertion は真偽値でなければならない",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": true,
+						"valid@when_format-assertion": "false",
+						"instance": 1
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/valid@when_format-assertion",
+					"keyword": "type"
+				}
+			]
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "正常: valid:false で expectedErrors を指定",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "/a",
+								"keyword": "type"
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "valid:true では expectedErrors は不可",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": true,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "",
+								"keyword": "type"
+							}
+						]
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors",
+					"keyword": "not"
+				}
+			]
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "正常: valid:false で expectedErrors は省略可",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1
+					}
+				]
+			}
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "expectedErrors は空配列不可(1件以上)",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": []
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors",
+					"keyword": "minItems"
+				}
+			]
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "正常: ルート自身のエラーは instanceLocation を空文字列で指定",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "",
+								"keyword": "type"
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "正常: schemaLocation と message(文字列)を指定",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "/a",
+								"schemaLocation": "#/properties/a/type",
+								"keyword": "type",
+								"message": "must be string"
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "正常: message に正規表現とキーワードの配列を指定",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "/a",
+								"keyword": "type",
+								"message": {
+									"regex": [
+										"^must be",
+										"string$"
+									],
+									"keyword": [
+										"must",
+										"string"
+									]
+								}
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "正常: message の regex は単一文字列でも可",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "/a",
+								"keyword": "type",
+								"message": {
+									"regex": "^must"
+								}
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "expectedErrors は instanceLocation 必須",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"keyword": "type"
+							}
+						]
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors/0",
+					"keyword": "required"
+				}
+			]
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "expectedErrors は keyword 必須",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "/a"
+							}
+						]
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors/0",
+					"keyword": "required"
+				}
+			]
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "expectedErrors の要素の未定義プロパティは不可",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "/a",
+								"keyword": "type",
+								"extra": 1
+							}
+						]
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors/0",
+					"keyword": "unevaluatedProperties"
+				}
+			]
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "message のオブジェクトは未定義プロパティ不可",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "/a",
+								"keyword": "type",
+								"message": {
+									"contains": "x"
+								}
+							}
+						]
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors/0/message",
+					"keyword": "oneOf"
+				}
+			]
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "message は数値は不可",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "/a",
+								"keyword": "type",
+								"message": 1
+							}
+						]
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors/0/message",
+					"keyword": "oneOf"
+				}
+			]
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "message.keyword は文字列の配列でなければならない(要素が数値は不可)",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "/a",
+								"keyword": "type",
+								"message": {
+									"keyword": [
+										1
+									]
+								}
+							}
+						]
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors/0/message",
+					"keyword": "oneOf"
+				}
+			]
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "instanceLocation が JSON Pointer でない: format 未評価では可、format 評価時は不可",
+			"valid": true,
+			"valid@when_format-assertion": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "a/b",
+								"keyword": "type"
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "message.regex が不正な正規表現: format 未評価では可、format 評価時は不可",
+			"valid": true,
+			"valid@when_format-assertion": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "/a",
+								"keyword": "type",
+								"message": {
+									"regex": "("
+								}
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "expectedErrors は配列でなければならない",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "property",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": {
+							"instanceLocation": "",
+							"keyword": "type"
+						}
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors",
+					"keyword": "type"
+				}
+			]
+		}
+	]
+}
