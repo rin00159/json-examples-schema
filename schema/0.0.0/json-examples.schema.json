@@ -1,6 +1,7 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"title": "json-examples.schema",
+	"$id": "https://raw.githubusercontent.com/rin00159/json-examples-schema/refs/heads/main/schema/0.0.0/json-examples.schema.json",
+	"title": "JSON Examples - Schema",
 	"$defs": {
 		"stringOrStrings": {
 			"oneOf": [
@@ -135,7 +136,7 @@
 					},
 
 					"pointer": {
-						"description": "exampleが対象にしているschmeaへの json-pointer。「カテゴライズ項目」ではないexampleの主題となるnodeを示すgroup-pointer。instanceに頼らずこれをつけ強調する必要がある場合に使う",
+						"description": "exampleが対象にしているschmeaへの強調したい部分への json-pointer。大抵はinstanceから読めるため余程強調したい場合以外は不要。",
 						"oneOf": [
 							{ "type": "string", "format": "json-pointer" },
 							{
