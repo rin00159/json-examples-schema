@@ -26,10 +26,7 @@
 						"group": "property",
 						"groupPointer": "/$defs/foo",
 						"name": "size",
-						"pointer": [
-							"/a",
-							"/b"
-						],
+						"pointer": ["/a", "/b"],
 						"label": "正常: foo",
 						"valid": true,
 						"instance": {
@@ -316,11 +313,7 @@
 					{
 						"group": "basic",
 						"valid": true,
-						"instance": [
-							1,
-							"a",
-							{}
-						]
+						"instance": [1, "a", {}]
 					}
 				]
 			}
@@ -426,10 +419,7 @@
 				"jsons": [
 					{
 						"group": "property",
-						"pointer": [
-							"/a",
-							"/b"
-						],
+						"pointer": ["/a", "/b"],
 						"valid": true,
 						"instance": 1
 					}
@@ -467,10 +457,7 @@
 				"jsons": [
 					{
 						"group": "property",
-						"pointer": [
-							"/a",
-							1
-						],
+						"pointer": ["/a", 1],
 						"valid": true,
 						"instance": 1
 					}
@@ -514,9 +501,7 @@
 				"jsons": [
 					{
 						"group": "basic",
-						"label": [
-							"a"
-						],
+						"label": ["a"],
 						"valid": true,
 						"instance": 1
 					}
@@ -712,14 +697,8 @@
 								"instanceLocation": "/a",
 								"keyword": "type",
 								"message": {
-									"regex": [
-										"^must be",
-										"string$"
-									],
-									"keyword": [
-										"must",
-										"string"
-									]
+									"regex": ["^must be", "string$"],
+									"keyword": ["must", "string"]
 								}
 							}
 						]
@@ -905,9 +884,7 @@
 								"instanceLocation": "/a",
 								"keyword": "type",
 								"message": {
-									"keyword": [
-										1
-									]
+									"keyword": [1]
 								}
 							}
 						]
