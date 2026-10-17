@@ -37,7 +37,7 @@
 						"group": "property",
 						"label": "foo は不可",
 						"valid": false,
-						"valid@when_format-assertion": true,
+						"valid@when_formatAssertion": true,
 						"instance": [],
 						"expectedErrors": [
 							{
@@ -382,12 +382,12 @@
 			"groupPointer": "/properties/jsons/items/properties/groupPointer",
 			"label": "groupPointer が JSON Pointer でない: format 未評価では可、format 評価時は不可",
 			"valid": true,
-			"valid@when_format-assertion": false,
+			"valid@when_formatAssertion": false,
 			"instance": {
 				"jsons": [
 					{
 						"group": "property",
-						"groupPointer": "$defs/a",
+						"groupPointer": "/$defs/a",
 						"valid": true,
 						"instance": 1
 					}
@@ -516,15 +516,15 @@
 		},
 		{
 			"group": "property",
-			"groupPointer": "/properties/jsons/items/properties/valid@when_format-assertion",
-			"label": "正常: valid@when_format-assertion は真偽値",
+			"groupPointer": "/properties/jsons/items/properties/valid@when_formatAssertion",
+			"label": "正常: valid@when_formatAssertion は真偽値",
 			"valid": true,
 			"instance": {
 				"jsons": [
 					{
 						"group": "property",
 						"valid": true,
-						"valid@when_format-assertion": false,
+						"valid@when_formatAssertion": false,
 						"instance": 1
 					}
 				]
@@ -532,22 +532,22 @@
 		},
 		{
 			"group": "property",
-			"groupPointer": "/properties/jsons/items/properties/valid@when_format-assertion",
-			"label": "valid@when_format-assertion は真偽値でなければならない",
+			"groupPointer": "/properties/jsons/items/properties/valid@when_formatAssertion",
+			"label": "valid@when_formatAssertion は真偽値でなければならない",
 			"valid": false,
 			"instance": {
 				"jsons": [
 					{
 						"group": "property",
 						"valid": true,
-						"valid@when_format-assertion": "false",
+						"valid@when_formatAssertion": "false",
 						"instance": 1
 					}
 				]
 			},
 			"expectedErrors": [
 				{
-					"instanceLocation": "/jsons/0/valid@when_format-assertion",
+					"instanceLocation": "/jsons/0/valid@when_formatAssertion",
 					"keyword": "type"
 				}
 			]
@@ -903,7 +903,7 @@
 			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
 			"label": "instanceLocation が JSON Pointer でない: format 未評価では可、format 評価時は不可",
 			"valid": true,
-			"valid@when_format-assertion": false,
+			"valid@when_formatAssertion": false,
 			"instance": {
 				"jsons": [
 					{
@@ -912,7 +912,7 @@
 						"instance": 1,
 						"expectedErrors": [
 							{
-								"instanceLocation": "a/b",
+								"instanceLocation": "/a/b",
 								"keyword": "type"
 							}
 						]
@@ -925,7 +925,7 @@
 			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
 			"label": "message.regex が不正な正規表現: format 未評価では可、format 評価時は不可",
 			"valid": true,
-			"valid@when_format-assertion": false,
+			"valid@when_formatAssertion": false,
 			"instance": {
 				"jsons": [
 					{

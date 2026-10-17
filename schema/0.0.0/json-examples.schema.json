@@ -181,7 +181,7 @@
 						},
 						"minItems": 1
 					},
-					"valid@when_format-assertion": {
+					"valid@when_formatAssertion": {
 						"type": "boolean",
 						"description": "format を検証として扱う場合に限り `valid` をこの値で上書きする。format 未対応のエンジンでも対応済みのエンジンでも判定が一致するよう宣言するための指定。他のスキーマや検証以外の処理から参照してはならない"
 					}
