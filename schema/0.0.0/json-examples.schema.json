@@ -3,6 +3,9 @@
 	"$id": "https://raw.githubusercontent.com/rin00159/json-examples-schema/refs/heads/main/schema/0.0.0/json-examples.schema.json",
 	"title": "JSON Examples - Schema",
 	"description": "JSON Schema の example を、期待するバリデーション結果とともに記述するファイル形式",
+	"$vocabulary": {
+		"https://json-schema.org/draft/2020-12/vocab/format-assertion": true
+	},
 	"$defs": {
 		"stringOrStrings": {
 			"oneOf": [
@@ -21,10 +24,7 @@
 			"type": "object",
 			"title": "エラー詳細",
 			"unevaluatedProperties": false,
-			"required": [
-				"instanceLocation",
-				"keyword"
-			],
+			"required": ["instanceLocation", "keyword"],
 			"properties": {
 				"instanceLocation": {
 					"type": "string",
@@ -87,9 +87,7 @@
 	},
 	"type": "object",
 	"unevaluatedProperties": false,
-	"required": [
-		"jsons"
-	],
+	"required": ["jsons"],
 	"properties": {
 		"$schema": {
 			"type": "string",
@@ -100,11 +98,7 @@
 			"items": {
 				"type": "object",
 				"unevaluatedProperties": false,
-				"required": [
-					"group",
-					"valid",
-					"instance"
-				],
+				"required": ["group", "valid", "instance"],
 				"properties": {
 					"group": {
 						"type": "string",
