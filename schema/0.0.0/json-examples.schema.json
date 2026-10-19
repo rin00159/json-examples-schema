@@ -22,6 +22,10 @@
 					"type": "string",
 					"description": "確認したバージョン、または semver の範囲(例: 8.17.1, ^8.17.0)"
 				},
+				"options": {
+					"type": "object",
+					"description": "バリデータに渡すoption構造体"
+				},
 				"formats": {
 					"type": "object",
 					"title": "format 実装",
