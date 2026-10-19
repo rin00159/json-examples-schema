@@ -1,0 +1,14 @@
+{
+	"skip": [
+		{
+			"profile": "format-assert-fast",
+			"label": "message.regex が不正な正規表現: format 未評価では可、format 評価時は不可",
+			"reason": "regex format は pattern に置き換えられないため、生成版では不正な正規表現を検出できない"
+		},
+		{
+			"profile": "format-assert-full",
+			"label": "message.regex が不正な正規表現: format 未評価では可、format 評価時は不可",
+			"reason": "regex format は pattern に置き換えられないため、生成版では不正な正規表現を検出できない"
+		}
+	]
+}

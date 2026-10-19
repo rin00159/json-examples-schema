@@ -42,7 +42,7 @@
 						"expectedErrors": [
 							{
 								"instanceLocation": "",
-								"schemaLocation": "#/type",
+								"schemaLocation": "/type",
 								"keyword": "type",
 								"message": "must be object"
 							}
@@ -387,12 +387,18 @@
 				"jsons": [
 					{
 						"group": "property",
-						"groupPointer": "/$defs/a",
+						"groupPointer": "$defs/a",
 						"valid": true,
 						"instance": 1
 					}
 				]
-			}
+			},
+			"expectedErrors@when_formatAssertion": [
+				{
+					"instanceLocation": "/jsons/0/groupPointer",
+					"keyword": ["format", "pattern"]
+				}
+			]
 		},
 		{
 			"group": "property",
@@ -672,7 +678,7 @@
 						"expectedErrors": [
 							{
 								"instanceLocation": "/a",
-								"schemaLocation": "#/properties/a/type",
+								"schemaLocation": "/properties/a/type",
 								"keyword": "type",
 								"message": "must be string"
 							}
@@ -912,13 +918,19 @@
 						"instance": 1,
 						"expectedErrors": [
 							{
-								"instanceLocation": "/a/b",
+								"instanceLocation": "a/b",
 								"keyword": "type"
 							}
 						]
 					}
 				]
-			}
+			},
+			"expectedErrors@when_formatAssertion": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors/0/instanceLocation",
+					"keyword": ["format", "pattern"]
+				}
+			]
 		},
 		{
 			"group": "property:defs",
@@ -943,7 +955,13 @@
 						]
 					}
 				]
-			}
+			},
+			"expectedErrors@when_formatAssertion": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors/0/message/regex",
+					"keyword": "format"
+				}
+			]
 		},
 		{
 			"group": "property:defs",
@@ -967,6 +985,491 @@
 				{
 					"instanceLocation": "/jsons/0/expectedErrors",
 					"keyword": "type"
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/valid@when_formatAssertionFull",
+			"label": "正常: valid@when_formatAssertionFull は真偽値",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true,
+						"instance": 1,
+						"valid@when_formatAssertionFull": false
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/valid@when_formatAssertionFull",
+			"label": "valid@when_formatAssertionFull は真偽値でなければならない",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true,
+						"instance": 1,
+						"valid@when_formatAssertionFull": "no"
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/valid@when_formatAssertionFull",
+					"keyword": "type",
+					"params": {
+						"type": "boolean"
+					}
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/valid@when_formatAssertionFull",
+			"label": "fast では通り full では通らない値は valid@when_formatAssertionFull で宣言する(uri-reference)",
+			"valid": true,
+			"valid@when_formatAssertionFull": false,
+			"instance": {
+				"$schema": "http://[bad",
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true,
+						"instance": 1
+					}
+				]
+			},
+			"expectedErrors@when_formatAssertionFull": [
+				{
+					"instanceLocation": "/$schema",
+					"keyword": ["format", "pattern"]
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors@when_formatAssertion",
+			"label": "正常: valid@when_formatAssertion: false の例には expectedErrors@when_formatAssertion を指定できる",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true,
+						"instance": 1,
+						"valid@when_formatAssertion": false,
+						"expectedErrors@when_formatAssertion": [
+							{
+								"instanceLocation": "",
+								"keyword": "type"
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors@when_formatAssertion",
+			"label": "valid@when_formatAssertion が false でなければ expectedErrors@when_formatAssertion は不可",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true,
+						"instance": 1,
+						"expectedErrors@when_formatAssertion": [
+							{
+								"instanceLocation": "",
+								"keyword": "type"
+							}
+						]
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors@when_formatAssertion",
+					"keyword": "not"
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors@when_formatAssertion",
+			"label": "valid@when_formatAssertion: true の例でも expectedErrors@when_formatAssertion は不可",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": false,
+						"instance": 1,
+						"valid@when_formatAssertion": true,
+						"expectedErrors@when_formatAssertion": [
+							{
+								"instanceLocation": "",
+								"keyword": "type"
+							}
+						]
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors@when_formatAssertion",
+					"keyword": "not"
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors@when_formatAssertion",
+			"label": "正常: valid: false では expectedErrors と expectedErrors@when_formatAssertion を併記できる",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": false,
+						"instance": 1,
+						"valid@when_formatAssertion": false,
+						"expectedErrors": [
+							{
+								"instanceLocation": "",
+								"keyword": "type"
+							}
+						],
+						"expectedErrors@when_formatAssertion": [
+							{
+								"instanceLocation": "",
+								"keyword": ["format", "pattern"]
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors@when_formatAssertionFull",
+			"label": "正常: valid@when_formatAssertionFull: false の例には expectedErrors@when_formatAssertionFull を指定できる",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true,
+						"instance": 1,
+						"valid@when_formatAssertionFull": false,
+						"expectedErrors@when_formatAssertionFull": [
+							{
+								"instanceLocation": "",
+								"keyword": ["format", "pattern"]
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors@when_formatAssertionFull",
+			"label": "valid@when_formatAssertionFull が false でなければ expectedErrors@when_formatAssertionFull は不可",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true,
+						"instance": 1,
+						"valid@when_formatAssertion": false,
+						"expectedErrors@when_formatAssertionFull": [
+							{
+								"instanceLocation": "",
+								"keyword": ["format", "pattern"]
+							}
+						]
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors@when_formatAssertionFull",
+					"keyword": "not"
+				}
+			]
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "正常: keyword は配列で複数の候補を書ける",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "/a",
+								"keyword": ["format", "pattern"]
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "keyword の配列は空にできない",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "/a",
+								"keyword": []
+							}
+						]
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors/0/keyword",
+					"keyword": "oneOf"
+				}
+			]
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "正常: params で required の対象プロパティを特定する",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": false,
+						"instance": {},
+						"expectedErrors": [
+							{
+								"instanceLocation": "",
+								"keyword": "required",
+								"params": {
+									"missingProperty": "id"
+								}
+							}
+						]
+					}
+				]
+			}
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "params はオブジェクトでなければならない",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "",
+								"keyword": "required",
+								"params": "id"
+							}
+						]
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors/0/params",
+					"keyword": "type",
+					"params": {
+						"type": "object"
+					}
+				}
+			]
+		},
+		{
+			"group": "property:defs",
+			"groupPointer": "/properties/jsons/items/properties/expectedErrors",
+			"label": "schemaLocation は JSON Pointer: \"#/type\" のような URI Reference 形式は format 評価時に不可",
+			"valid": true,
+			"valid@when_formatAssertion": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "",
+								"keyword": "type",
+								"schemaLocation": "#/type"
+							}
+						]
+					}
+				]
+			},
+			"expectedErrors@when_formatAssertion": [
+				{
+					"instanceLocation": "/jsons/0/expectedErrors/0/schemaLocation",
+					"keyword": ["format", "pattern"]
+				}
+			]
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/errorMatch",
+			"label": "正常: errorMatch は contains / exact",
+			"valid": true,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "",
+								"keyword": "type"
+							}
+						],
+						"errorMatch": "exact"
+					},
+					{
+						"group": "basic",
+						"valid": false,
+						"instance": 1,
+						"expectedErrors": [
+							{
+								"instanceLocation": "",
+								"keyword": "type"
+							}
+						],
+						"errorMatch": "contains"
+					}
+				]
+			}
+		},
+		{
+			"group": "property",
+			"groupPointer": "/properties/jsons/items/properties/errorMatch",
+			"label": "errorMatch は列挙外の値は不可",
+			"valid": false,
+			"instance": {
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": false,
+						"instance": 1,
+						"errorMatch": "all"
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/jsons/0/errorMatch",
+					"keyword": "enum",
+					"params": {
+						"allowedValues": ["contains", "exact"]
+					}
+				}
+			]
+		},
+		{
+			"group": "property:root",
+			"groupPointer": "/properties/engine",
+			"label": "正常: engine で想定する検証ライブラリを示す",
+			"valid": true,
+			"instance": {
+				"engine": {
+					"name": "ajv",
+					"version": "8.17.1",
+					"formats": {
+						"name": "ajv-formats",
+						"version": "3.0.1"
+					}
+				},
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true,
+						"instance": 1
+					}
+				]
+			}
+		},
+		{
+			"group": "property:root",
+			"groupPointer": "/properties/engine",
+			"label": "engine は name が必須",
+			"valid": false,
+			"instance": {
+				"engine": {
+					"version": "8.17.1"
+				},
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true,
+						"instance": 1
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/engine",
+					"keyword": "required",
+					"params": {
+						"missingProperty": "name"
+					}
+				}
+			]
+		},
+		{
+			"group": "property:root",
+			"groupPointer": "/properties/engine",
+			"label": "engine の未定義プロパティは不可",
+			"valid": false,
+			"instance": {
+				"engine": {
+					"name": "ajv",
+					"vendor": "x"
+				},
+				"jsons": [
+					{
+						"group": "basic",
+						"valid": true,
+						"instance": 1
+					}
+				]
+			},
+			"expectedErrors": [
+				{
+					"instanceLocation": "/engine",
+					"keyword": "unevaluatedProperties"
 				}
 			]
 		}
