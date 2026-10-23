@@ -1,0 +1,21 @@
+{
+	"generatedBy": {
+		"name": "format-assert-generator",
+		"version": "0.1.0"
+	},
+	"compiler": {
+		"name": "format-assert-compiler",
+		"version": "0.1.0"
+	},
+	"mode": "full",
+	"dictionary": {
+		"origin": "bundled:full",
+		"id": "https://raw.githubusercontent.com/rin00159/ajv-formats-jsonschema/main/schema/latest/formats.full.json"
+	},
+	"sources": [
+		{
+			"file": "json-examples.schema.json",
+			"sha256": "326457ddc7760c9fff1f68112774db8a810c5dddf9b007198ea50eb9344318d6"
+		}
+	]
+}

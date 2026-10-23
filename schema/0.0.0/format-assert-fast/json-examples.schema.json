@@ -1,0 +1,342 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/rin00159/json-examples-schema/refs/heads/main/schema/0.0.0/format-assert-fast/json-examples.schema.json",
+	"title": "JSON Examples - Schema",
+	"description": "JSON Schema の example を、期待するバリデーション結果とともに記述するファイル形式",
+	"$defs": {
+		"engine": {
+			"type": "object",
+			"title": "想定する検証ライブラリ",
+			"description": "このファイルの期待値(特に expectedErrors の message / schemaLocation / params)が前提にしている検証ライブラリ。省略可。この定義を外部のスキーマへの `$ref` に差し替えてもよい",
+			"required": [
+				"name"
+			],
+			"unevaluatedProperties": false,
+			"properties": {
+				"name": {
+					"type": "string",
+					"description": "検証ライブラリ名(例: ajv)"
+				},
+				"version": {
+					"type": "string",
+					"description": "確認したバージョン、または semver の範囲(例: 8.17.1, ^8.17.0)"
+				},
+				"options": {
+					"type": "object",
+					"description": "バリデータに渡すoption構造体"
+				},
+				"formats": {
+					"type": "object",
+					"title": "format 実装",
+					"description": "format の検証を提供するライブラリ(例: ajv-formats)",
+					"required": [
+						"name"
+					],
+					"unevaluatedProperties": false,
+					"properties": {
+						"name": {
+							"type": "string"
+						},
+						"version": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
+		"expectedErrors": {
+			"type": "array",
+			"items": {
+				"$ref": "#/$defs/expectedError"
+			},
+			"minItems": 1
+		},
+		"stringOrStrings": {
+			"oneOf": [
+				{
+					"type": "string"
+				},
+				{
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			]
+		},
+		"expectedError": {
+			"type": "object",
+			"title": "エラー詳細",
+			"unevaluatedProperties": false,
+			"required": [
+				"instanceLocation",
+				"keyword"
+			],
+			"properties": {
+				"instanceLocation": {
+					"type": "string",
+					"pattern": "^(?:\\/(?:[^~/]|~0|~1)*)*$",
+					"title": "エラー発生位置 (JSON Pointer)",
+					"description": "エラーが発生したデータ上の位置(JSON Pointer, RFC 6901)。ルート自身は空文字列"
+				},
+				"schemaLocation": {
+					"type": "string",
+					"pattern": "^(?:\\/(?:[^~/]|~0|~1)*)*$",
+					"title": "スキーマ上のエラー箇所 (JSON Pointer)",
+					"description": "バリデーションエラーを起こしたキーワードの、スキーマ上の位置(開始位置)を指す JSON Pointer(RFC 6901)。キーワード自身を含む(例: `/properties/id/type`)。`$ref` を辿った先のエラーは、そのキーワードが実際に書かれている位置で表す。実装によってパスの表現が異なるため、検証側は末尾の一致で比較してよい。format を pattern に置き換えた版ではキーワード名が変わるので比較されない"
+				},
+				"keyword": {
+					"title": "違反キーワード",
+					"description": "違反した JSON Schema のキーワード(例: type, enum, pattern)。配列の場合はいずれか1つに一致すればよい。format を pattern に置き換えた版でも同じ例を使うには `[\"format\", \"pattern\"]` と書く",
+					"oneOf": [
+						{
+							"type": "string"
+						},
+						{
+							"type": "array",
+							"items": {
+								"type": "string"
+							},
+							"minItems": 1,
+							"uniqueItems": true
+						}
+					]
+				},
+				"params": {
+					"type": "object",
+					"title": "エラーの付加情報",
+					"description": "キーワードごとの付加情報(例: required なら `{ \"missingProperty\": \"id\" }`、additionalProperties なら `{ \"additionalProperty\": \"x\" }`)。`required` や `additionalProperties` は親オブジェクトの位置で報告されるため、どのプロパティかを区別するのに使う。書いたキーだけが部分一致で比較される。実装に依存するため、format を pattern に置き換えた版では比較されない"
+				},
+				"message": {
+					"title": "期待されるエラーメッセージの検証仕様",
+					"description": "期待するエラーメッセージ。メッセージの文言は検証ライブラリの実装・バージョンに依存する(可搬なのは instanceLocation / keyword / params)。そのため、ファイル先頭の `engine` で想定する実装を宣言できる。文字列は部分一致、オブジェクトは正規表現・キーワードで検証する。format を pattern に置き換えた版では比較されない",
+					"oneOf": [
+						{
+							"type": "string",
+							"title": "文字列による検証"
+						},
+						{
+							"type": "object",
+							"title": "高度なルールの検証",
+							"properties": {
+								"regex": {
+									"title": "正規表現パターン",
+									"description": "メッセージが満たすべき正規表現。配列の場合はすべてに一致すること",
+									"oneOf": [
+										{
+											"type": "string",
+											"format": "regex"
+										},
+										{
+											"type": "array",
+											"items": {
+												"type": "string",
+												"format": "regex"
+											}
+										}
+									]
+								},
+								"keyword": {
+									"title": "必須キーワード",
+									"description": "メッセージに含まれるべきキーワード。配列の場合はすべてを含むこと",
+									"$ref": "#/$defs/stringOrStrings"
+								}
+							},
+							"unevaluatedProperties": false
+						}
+					]
+				}
+			}
+		}
+	},
+	"type": "object",
+	"unevaluatedProperties": false,
+	"required": [
+		"jsons"
+	],
+	"properties": {
+		"$schema": {
+			"type": "string",
+			"pattern": "^(?:(?:[a-zA-Z][a-z0-9+\\-.A-Z]*:)?\\/?\\/)?(?:[^\\\\\\s#][^\\s#]*)?(?:#[^\\\\\\s]*)?$"
+		},
+		"engine": {
+			"$ref": "#/$defs/engine"
+		},
+		"jsons": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"unevaluatedProperties": false,
+				"required": [
+					"group",
+					"valid",
+					"instance"
+				],
+				"properties": {
+					"group": {
+						"type": "string",
+						"description": "主要系統種別",
+						"oneOf": [
+							{
+								"const": "basic",
+								"title": "Basic Group",
+								"description": "基本的な用途のJSON(代表例)"
+							},
+							{
+								"const": "property",
+								"title": "Property Group",
+								"description": "プロパティ/node についての example"
+							},
+							{
+								"const": "property:root",
+								"title": "Root Property Group",
+								"description": "root プロパティ/node についての example"
+							},
+							{
+								"const": "property:defs",
+								"title": "Defs Property Group",
+								"description": "$defs に定義されたプロパティ/node についての example"
+							},
+							{
+								"const": "obsolete",
+								"title": "Obsolete Group",
+								"description": "廃止されたスキーマに関するJSON。廃止された JSON がバリデーションエラーになることを示すため `valid: false` で置く"
+							},
+							{
+								"const": "obsolete:property",
+								"title": "Obsolete Property Group",
+								"description": "廃止されたプロパティに関するJSON。廃止された JSON がバリデーションエラーになることを示すため `valid: false` で置く"
+							}
+						]
+					},
+					"groupPointer": {
+						"type": "string",
+						"pattern": "^(?:\\/(?:[^~/]|~0|~1)*)*$",
+						"description": "example が対象とするスキーマ位置(JSON Pointer)。対象ごとに分類したい場合に使う"
+					},
+					"name": {
+						"type": "string",
+						"description": "example が対象とするスキーマの分類名"
+					},
+					"pointer": {
+						"description": "強調したい対象位置(JSON Pointer)。instance から読み取れる場合は不要",
+						"oneOf": [
+							{
+								"type": "string",
+								"pattern": "^(?:\\/(?:[^~/]|~0|~1)*)*$"
+							},
+							{
+								"type": "array",
+								"items": {
+									"type": "string",
+									"pattern": "^(?:\\/(?:[^~/]|~0|~1)*)*$"
+								}
+							}
+						]
+					},
+					"label": {
+						"type": "string",
+						"description": "タイトルや説明"
+					},
+					"valid": {
+						"type": "boolean",
+						"description": "true: instance がスキーマ上正しい / false: 正しくない"
+					},
+					"instance": {
+						"description": "example の実体。スキーマは利用者が自由に割り当てる"
+					},
+					"expectedErrors": {
+						"title": "期待されるバリデーションエラー",
+						"description": "期待するバリデーションエラー。意図しない別のエラーで検証が通ることを防ぐ。`valid: false` の例でだけ指定できる。省略時はエラーの内容を検証しない(検証側は警告してよい)",
+						"$ref": "#/$defs/expectedErrors"
+					},
+					"expectedErrors@when_formatAssertion": {
+						"title": "format 検証時に期待されるバリデーションエラー",
+						"description": "format を検証として扱う場合(fast / full のどちらでも)の expectedErrors。`valid@when_formatAssertion: false` の例でだけ指定できる。`expectedErrors@when_formatAssertionFull` が指定されていて full で検証する場合は、そちらが優先される",
+						"$ref": "#/$defs/expectedErrors"
+					},
+					"expectedErrors@when_formatAssertionFull": {
+						"title": "format を full で検証する時に期待されるバリデーションエラー",
+						"description": "format を full の検証として扱う場合の expectedErrors。`valid@when_formatAssertionFull: false` の例でだけ指定できる。優先順位は valid と同じ(expectedErrors@when_formatAssertionFull > expectedErrors@when_formatAssertion > expectedErrors)",
+						"$ref": "#/$defs/expectedErrors"
+					},
+					"errorMatch": {
+						"enum": [
+							"contains",
+							"exact"
+						],
+						"default": "contains",
+						"description": "expectedErrors とバリデーションエラーの突き合わせ方。contains: 期待した各エラーが含まれていればよい(既定) / exact: 期待したエラーだけが過不足なく出る"
+					},
+					"valid@when_formatAssertion": {
+						"type": "boolean",
+						"description": "format を検証として扱う場合(fast / full のどちらでも)に限り `valid` をこの値で上書きする。`valid@when_formatAssertionFull` が指定されていて full で検証する場合は、そちらが優先される。format 未対応のエンジンでも対応済みのエンジンでも判定が一致するよう宣言するための指定。他のスキーマや検証以外の処理から参照してはならない"
+					},
+					"valid@when_formatAssertionFull": {
+						"type": "boolean",
+						"description": "format を full の検証として扱う場合に限り、`valid` および `valid@when_formatAssertion` をこの値で上書きする(優先順位: valid@when_formatAssertionFull > valid@when_formatAssertion > valid)。fast の検証では使われない。fast では通るが full では通らない値(例: 存在しない日付)を宣言するための指定。他のスキーマや検証以外の処理から参照してはならない"
+					}
+				},
+				"allOf": [
+					{
+						"if": {
+							"properties": {
+								"valid": {
+									"const": true
+								}
+							}
+						},
+						"then": {
+							"properties": {
+								"expectedErrors": {
+									"not": {},
+									"description": "valid: true では expectedErrors を指定できない"
+								}
+							}
+						}
+					},
+					{
+						"if": {
+							"required": [
+								"valid@when_formatAssertion"
+							],
+							"properties": {
+								"valid@when_formatAssertion": {
+									"const": false
+								}
+							}
+						},
+						"else": {
+							"properties": {
+								"expectedErrors@when_formatAssertion": {
+									"not": {},
+									"description": "valid@when_formatAssertion: false の例でだけ expectedErrors@when_formatAssertion を指定できる"
+								}
+							}
+						}
+					},
+					{
+						"if": {
+							"required": [
+								"valid@when_formatAssertionFull"
+							],
+							"properties": {
+								"valid@when_formatAssertionFull": {
+									"const": false
+								}
+							}
+						},
+						"else": {
+							"properties": {
+								"expectedErrors@when_formatAssertionFull": {
+									"not": {},
+									"description": "valid@when_formatAssertionFull: false の例でだけ expectedErrors@when_formatAssertionFull を指定できる"
+								}
+							}
+						}
+					}
+				]
+			}
+		}
+	}
+}

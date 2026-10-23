@@ -1,0 +1,7 @@
+{
+	"$schema": "https://raw.githubusercontent.com/rin00159/format-assert-generator/refs/heads/main/schema/0.0.0/format-assert.config.schema.json",
+	"options": {
+		"mode": "both",
+		"strict": true
+	}
+}
